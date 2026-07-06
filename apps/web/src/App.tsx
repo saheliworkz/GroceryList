@@ -50,6 +50,11 @@ const storeAppUrl = (storeId: StoreId, webUrl: string) => {
   const destination = webUrl.replace(/^https?:\/\//, "");
   return `intent://${destination}#Intent;scheme=https;package=${androidPackages[storeId]};S.browser_fallback_url=${encodeURIComponent(webUrl)};end`;
 };
+const browserSearchUrl = (webUrl: string) => {
+  if (typeof navigator === "undefined" || !/Android/i.test(navigator.userAgent)) return webUrl;
+  const destination = webUrl.replace(/^https?:\/\//, "");
+  return `intent://${destination}#Intent;scheme=https;package=com.android.chrome;S.browser_fallback_url=${encodeURIComponent(webUrl)};end`;
+};
 const emptyOffer = (): DraftOffer => ({ status: "unverified", brand: "", pack: "", price: "", productUrl: "", imageUrl: "" });
 const initialStoreDrafts = () => Object.fromEntries(stores.map((store) => [store.id, { deliveryFee: "0", couponDiscount: "0" }])) as Record<StoreId, StoreDraft>;
 const money = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" });
@@ -260,7 +265,7 @@ export default function App() {
           const searchQuery = `${item.name} ${item.minimumOrder ?? ""}`.trim();
           return <article className={`verify-card ${draft.status}`} key={item.id}>
             <div className="verify-title"><span><strong>{item.name}</strong></span>
-              <a href={store.search(searchQuery)} target="_blank" rel="noreferrer">
+              <a href={browserSearchUrl(store.search(searchQuery))} target="_blank" rel="noreferrer">
                 Search {store.name} website ↗
               </a></div>
             <div className="status-buttons">

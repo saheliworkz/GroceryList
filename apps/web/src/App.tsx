@@ -257,19 +257,11 @@ export default function App() {
         </div>
         <div className="verify-list">{selectedItems.map((item) => {
           const draft = getDraft(store.id, item.id);
+          const searchQuery = `${item.name} ${item.minimumOrder ?? ""}`.trim();
           return <article className={`verify-card ${draft.status}`} key={item.id}>
             <div className="verify-title"><span><strong>{item.name}</strong></span>
-              <a href={storeAppUrl(store.id, storeHomeUrls[store.id])}
-                onClick={async (event) => {
-                  event.preventDefault();
-                  const destination = event.currentTarget.href;
-                  try {
-                    await navigator.clipboard.writeText(item.name);
-                  } finally {
-                    window.location.href = destination;
-                  }
-                }}>
-                Copy item &amp; open {store.name} ↗
+              <a href={store.search(searchQuery)} target="_blank" rel="noreferrer">
+                Search {store.name} website ↗
               </a></div>
             <div className="status-buttons">
               <button className={assignedStores[item.id] === store.id ? "assigned" : ""}

@@ -260,7 +260,15 @@ export default function App() {
           return <article className={`verify-card ${draft.status}`} key={item.id}>
             <div className="verify-title"><span><strong>{item.name}</strong></span>
               <a href={storeAppUrl(store.id, storeHomeUrls[store.id])}
-                onClick={() => { void navigator.clipboard?.writeText(item.name); }}>
+                onClick={async (event) => {
+                  event.preventDefault();
+                  const destination = event.currentTarget.href;
+                  try {
+                    await navigator.clipboard.writeText(item.name);
+                  } finally {
+                    window.location.href = destination;
+                  }
+                }}>
                 Copy item &amp; open {store.name} ↗
               </a></div>
             <div className="status-buttons">

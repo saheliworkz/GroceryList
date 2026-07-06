@@ -2,7 +2,7 @@ import type { GroceryItem } from "./types.js";
 
 const groups: Record<string, Array<[string, string | null]>> = {
   Rice: [
-    ["GobindoBhog", "1 Kg"], ["Everyday Basmati rice", "10 Kg"], ["Basmati rice", "2 Kg"]
+    ["GobindoBhog", "1 Kg"], ["Parboiled Basmati rice", "10 Kg"], ["Basmati rice", "2 Kg"]
   ],
   Dal: [
     ["Masoor", "1 Kg"], ["Moong", "1 Kg"], ["Toor", "250 gm"], ["Urad", "250 gm"],

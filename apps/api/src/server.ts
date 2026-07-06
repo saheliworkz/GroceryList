@@ -1,5 +1,6 @@
 import crypto from "node:crypto";
 import path from "node:path";
+import { fileURLToPath } from "node:url";
 import cors from "cors";
 import express from "express";
 import helmet from "helmet";
@@ -131,7 +132,8 @@ app.post("/api/cart-sessions/:id/confirm", (req, res) => {
   res.json({ id: req.params.id, status: session.status, result: session.result });
 });
 
-const webDist = path.resolve(process.cwd(), "apps/web/dist");
+const moduleDirectory = path.dirname(fileURLToPath(import.meta.url));
+const webDist = path.resolve(moduleDirectory, "../../web/dist");
 app.use(express.static(webDist));
 app.get("*splat", (_req, res) => res.sendFile(path.join(webDist, "index.html")));
 

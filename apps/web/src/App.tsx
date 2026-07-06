@@ -257,10 +257,9 @@ export default function App() {
         </div>
         <div className="verify-list">{selectedItems.map((item) => {
           const draft = getDraft(store.id, item.id);
-          const searchQuery = `${item.name} ${item.minimumOrder ?? ""}`.trim();
           return <article className={`verify-card ${draft.status}`} key={item.id}>
             <div className="verify-title"><span><strong>{item.name}</strong></span>
-              <a href={storeAppUrl(store.id, store.search(searchQuery))}>Search {store.name} ↗</a></div>
+              <a href={storeAppUrl(store.id, storeHomeUrls[store.id])}>Open {store.name} ↗</a></div>
             <div className="status-buttons">
               <button className={assignedStores[item.id] === store.id ? "assigned" : ""}
                 onClick={() => {

@@ -38,6 +38,18 @@ const storeHomeUrls: Record<StoreId, string> = {
   "blinkit": "https://blinkit.com/",
   "zepto": "https://www.zeptonow.com/"
 };
+const androidPackages: Record<StoreId, string> = {
+  "bigbasket": "com.bigbasket.mobileapp",
+  "amazon-fresh": "in.amazon.mShop.android.shopping",
+  "instamart": "in.swiggy.android",
+  "blinkit": "com.grofers.customerapp",
+  "zepto": "com.zeptoconsumerapp"
+};
+const storeAppUrl = (storeId: StoreId, webUrl: string) => {
+  if (typeof navigator === "undefined" || !/Android/i.test(navigator.userAgent)) return webUrl;
+  const destination = webUrl.replace(/^https?:\/\//, "");
+  return `intent://${destination}#Intent;scheme=https;package=${androidPackages[storeId]};S.browser_fallback_url=${encodeURIComponent(webUrl)};end`;
+};
 const emptyOffer = (): DraftOffer => ({ status: "unverified", brand: "", pack: "", price: "", productUrl: "", imageUrl: "" });
 const initialStoreDrafts = () => Object.fromEntries(stores.map((store) => [store.id, { deliveryFee: "0", couponDiscount: "0" }])) as Record<StoreId, StoreDraft>;
 const money = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" });
@@ -248,7 +260,7 @@ export default function App() {
           const searchQuery = `${item.name} ${item.minimumOrder ?? ""}`.trim();
           return <article className={`verify-card ${draft.status}`} key={item.id}>
             <div className="verify-title"><span><strong>{item.name}</strong></span>
-              <a href={store.search(searchQuery)} target="_blank" rel="noreferrer">Search {store.name} ↗</a></div>
+              <a href={storeAppUrl(store.id, store.search(searchQuery))}>Search {store.name} ↗</a></div>
             <div className="status-buttons">
               <button className={assignedStores[item.id] === store.id ? "assigned" : ""}
                 onClick={() => {
@@ -283,7 +295,7 @@ export default function App() {
           <ul>{assignedItems.map(({ item }) => <li key={item.id}>
             <span><strong>{item.name}</strong></span>
           </li>)}</ul>
-          <a href={storeHomeUrls[store.id]} target="_blank" rel="noreferrer">Open {store.name} ↗</a>
+          <a href={storeAppUrl(store.id, storeHomeUrls[store.id])}>Open {store.name} ↗</a>
         </article>)}</div>
       </section>}
     </section>}

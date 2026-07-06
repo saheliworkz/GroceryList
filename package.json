@@ -1,0 +1,17 @@
+{
+  "name": "grocery-split-agent",
+  "private": true,
+  "workspaces": ["apps/*"],
+  "scripts": {
+    "dev": "concurrently \"pnpm --filter @grocery-agent/api dev\" \"pnpm --filter @grocery-agent/web dev\"",
+    "build": "pnpm --filter @grocery-agent/web build && pnpm --filter @grocery-agent/api build",
+    "start": "pnpm --filter @grocery-agent/api start",
+    "test": "pnpm --filter @grocery-agent/api test"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}

@@ -203,6 +203,16 @@ export default function App() {
 
   const displayedPlans = !result ? [] : strategy === "single" ? (result.singleStoreBest ? [result.singleStoreBest] : []) : result.stores;
   const displayedTotal = displayedPlans.reduce((sum, plan) => sum + plan.total, 0);
+  const emailSelectedItems = () => {
+    const body = [
+      "Selected grocery items:",
+      "",
+      ...selectedItems.map((item, index) =>
+        `${index + 1}. ${item.name} — Minimum amount: ${item.minimumOrder ?? "Not specified"}`
+      )
+    ].join("\n");
+    window.location.href = `mailto:saheliworkz@gmail.com?subject=${encodeURIComponent("Selected grocery list")}&body=${encodeURIComponent(body)}`;
+  };
 
   return <main>
     <header className="hero">
@@ -227,7 +237,10 @@ export default function App() {
         </label>)}</div>
       </details>)}</section>
       <div className="action-bar"><span>{selected.size ? `${selected.size} items ready` : "Choose at least one item"}</span>
-        <button disabled={!selected.size || !/^[1-9][0-9]{5}$/.test(pincode)} onClick={() => setPhase("verify")}>Verify store prices</button></div>
+        <div className="action-buttons">
+          <button className="email-list" disabled={!selected.size} onClick={emailSelectedItems}>Email selected list</button>
+          <button disabled={!selected.size || !/^[1-9][0-9]{5}$/.test(pincode)} onClick={() => setPhase("verify")}>Verify store prices</button>
+        </div></div>
     </>}
 
     {phase === "verify" && <section className="verification">

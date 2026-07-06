@@ -259,7 +259,10 @@ export default function App() {
           const draft = getDraft(store.id, item.id);
           return <article className={`verify-card ${draft.status}`} key={item.id}>
             <div className="verify-title"><span><strong>{item.name}</strong></span>
-              <a href={storeAppUrl(store.id, storeHomeUrls[store.id])}>Open {store.name} ↗</a></div>
+              <a href={storeAppUrl(store.id, storeHomeUrls[store.id])}
+                onClick={() => { void navigator.clipboard?.writeText(item.name); }}>
+                Copy item &amp; open {store.name} ↗
+              </a></div>
             <div className="status-buttons">
               <button className={assignedStores[item.id] === store.id ? "assigned" : ""}
                 onClick={() => {
